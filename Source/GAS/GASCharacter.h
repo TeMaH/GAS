@@ -3,11 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AbilitySystemInterface.h"
 #include "GameFramework/Character.h"
 #include "GASCharacter.generated.h"
 
 UCLASS(config=Game)
-class AGASCharacter : public ACharacter
+class AGASCharacter : public ACharacter, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
@@ -29,7 +30,12 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
 
+    // Implement IAbilitySystemInterface
+    virtual class UAbilitySystemComponent* GetAbilitySystemComponent() const override { return AbilitySystemComponent.Get(); }
+
 protected:
+	TWeakObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
+	TWeakObjectPtr<class UGASAttributeSet> AttributeSetBase;
 
 	/** Resets HMD orientation in VR. */
 	void OnResetVR();
