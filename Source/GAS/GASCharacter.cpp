@@ -45,6 +45,12 @@ AGASCharacter::AGASCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
+
+
+	// Initialize our AbilitySystemComponent
+	AbilitySystemComponent = CreateDefaultSubobject<UCharacterAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
+	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
+	AbilitySystemComponent->SetIsReplicated(true);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -131,4 +137,9 @@ void AGASCharacter::MoveRight(float Value)
 		// add movement in that direction
 		AddMovementInput(Direction, Value);
 	}
+}
+
+UAbilitySystemComponent* AGASCharacter::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
 }
