@@ -45,7 +45,6 @@ AGASCharacter::AGASCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 
-	AttributeSetBase = CreateDefaultSubobject<UGASAttributeSet>(TEXT("AttributeSetBase"));
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
@@ -87,6 +86,57 @@ void AGASCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInput
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &AGASCharacter::OnResetVR);
 }
 
+
+void AGASCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	if(AbilitySystemComponent)
+	{
+		AbilitySystemComponent->InitAbilityActorInfo(this, this);
+	}
+}
+
+void AGASCharacter::AcquireAbility(TSubclassOf<UGameplayAbility> AbilityToAquire)
+{
+	if(!HasAuthority())
+	{
+		return;
+	}
+
+	if (ensure(AbilitySystemComponent != nullptr))
+    {
+        if (AbilityToAquire != nullptr)
+        {
+            // TODO: maybe need refactor
+            // GiveAbility(AbilitySpec)
+            // https://github.com/tranek/GASDocumentation#463-granting-abilities
+            FGameplayAbilitySpecDef AbilitySpecDef = FGameplayAbilitySpecDef();
+            AbilitySpecDef.Ability = AbilityToAquire;
+            FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilitySpecDef, 1);
+            AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(AbilitySpec));
+        }
+    }
+}
+
+void AGASCharacter::BeginPlay()
+{
+	GetAbilitySystemComponent()->AddSet<UGASAttributeSet>();
+	Super::BeginPlay();
+
+	UGASAttributeSet* Set = GetAttributeSet();
+	Set->InitFirstAttr(10.0f);
+	Set->InitSecondAttr(20.2f);
+	Set->InitThirdAttr(30.33f);
+
+	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+	if(HasAuthority())
+	{
+        for (TSubclassOf<UGameplayAbility>& Ability : Abilities)
+        {
+            AcquireAbility(Ability);
+        }
+	}
+}
 
 void AGASCharacter::OnResetVR()
 {
@@ -144,11 +194,6 @@ void AGASCharacter::MoveRight(float Value)
 	}
 }
 
-UAbilitySystemComponent* AGASCharacter::GetAbilitySystemComponent() const
-{
-	return AbilitySystemComponent;
-}
-
 void AGASCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
@@ -170,4 +215,14 @@ void AGASCharacter::Tick(float DeltaSeconds)
 		, 0.f //float Duration = -1.000000
 		);
 	
+}
+
+UAbilitySystemComponent* AGASCharacter::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
+}
+
+UGASAttributeSet* AGASCharacter::GetAttributeSet() const
+{
+    return const_cast<UGASAttributeSet*>(GetAbilitySystemComponent()->GetSet<UGASAttributeSet>());
 }

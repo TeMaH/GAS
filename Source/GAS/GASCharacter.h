@@ -8,6 +8,7 @@
 
 #include "AbilitySystemInterface.h"
 #include "UCharacterAbilitySystemComponent.h"
+#include "GASAttributeSet.h"
 
 
 #include "GASCharacter.generated.h"
@@ -36,11 +37,19 @@ public:
 	float BaseLookUpRate;
 
     // Implement IAbilitySystemInterface
-    virtual class UAbilitySystemComponent* GetAbilitySystemComponent() const override { return AbilitySystemComponent.Get(); }
+    virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+
+	UGASAttributeSet* GetAttributeSet() const;
 
 protected:
-	TWeakObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
-	TWeakObjectPtr<class UGASAttributeSet> AttributeSetBase;
+	void PossessedBy(AController* NewController) override;
+
+	void AcquireAbility(TSubclassOf<UGameplayAbility> AbilityToAquire);
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Gameplay Abilities")
+    TArray<TSubclassOf<UGameplayAbility>> Abilities;
+
+	void BeginPlay() override;
 
 	/** Resets HMD orientation in VR. */
 	void OnResetVR();
@@ -86,9 +95,6 @@ public:
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Gameplay Abilities")
 	UCharacterAbilitySystemComponent* AbilitySystemComponent = nullptr;
-
-public:
-	UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 	void Tick(float DeltaSeconds) override;
 
