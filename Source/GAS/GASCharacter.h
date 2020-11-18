@@ -74,12 +74,17 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
+
+///////////////////////////////////////////////////////////////////
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Gameplay Abilities")
 	UCharacterAbilitySystemComponent* AbilitySystemComponent = nullptr;
 
 public:
 	UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+
+	void Tick(float DeltaSeconds) override;
 
 
 

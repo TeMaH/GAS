@@ -9,6 +9,8 @@
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
 
+#include "DrawDebugHelpers.h"
+
 //////////////////////////////////////////////////////////////////////////
 // AGASCharacter
 
@@ -142,4 +144,27 @@ void AGASCharacter::MoveRight(float Value)
 UAbilitySystemComponent* AGASCharacter::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
+}
+
+void AGASCharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	FString Msg;
+	if (HasAuthority())
+	{
+		Msg.Append("Server");
+	}
+	else
+	{
+		Msg.Append("Client");
+	}
+
+	DrawDebugString(GetWorld(), GetActorLocation() + FVector::UpVector * GetCapsuleComponent()->GetScaledCapsuleHalfHeight()
+		, Msg
+		, nullptr // class AActor* TestBaseActor = NULL
+		, FColor::White // FColor const& TextColor = FColor::White
+		, 0.f //float Duration = -1.000000
+		);
+	
 }
