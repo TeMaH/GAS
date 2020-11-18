@@ -10,6 +10,8 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GASAttributeSet.h"
 
+#include "DrawDebugHelpers.h"
+
 //////////////////////////////////////////////////////////////////////////
 // AGASCharacter
 
@@ -48,6 +50,12 @@ AGASCharacter::AGASCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
+
+
+	// Initialize our AbilitySystemComponent
+	AbilitySystemComponent = CreateDefaultSubobject<UCharacterAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
+	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
+	AbilitySystemComponent->SetIsReplicated(true);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -134,4 +142,32 @@ void AGASCharacter::MoveRight(float Value)
 		// add movement in that direction
 		AddMovementInput(Direction, Value);
 	}
+}
+
+UAbilitySystemComponent* AGASCharacter::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
+}
+
+void AGASCharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	FString Msg;
+	if (HasAuthority())
+	{
+		Msg.Append("Server");
+	}
+	else
+	{
+		Msg.Append("Client");
+	}
+
+	DrawDebugString(GetWorld(), GetActorLocation() + FVector::UpVector * GetCapsuleComponent()->GetScaledCapsuleHalfHeight()
+		, Msg
+		, nullptr // class AActor* TestBaseActor = NULL
+		, FColor::White // FColor const& TextColor = FColor::White
+		, 0.f //float Duration = -1.000000
+		);
+	
 }

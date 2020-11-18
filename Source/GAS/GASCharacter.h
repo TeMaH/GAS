@@ -5,6 +5,11 @@
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
 #include "GameFramework/Character.h"
+
+#include "AbilitySystemInterface.h"
+#include "UCharacterAbilitySystemComponent.h"
+
+
 #include "GASCharacter.generated.h"
 
 UCLASS(config=Game)
@@ -74,5 +79,20 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+
+///////////////////////////////////////////////////////////////////
+
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Gameplay Abilities")
+	UCharacterAbilitySystemComponent* AbilitySystemComponent = nullptr;
+
+public:
+	UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+
+	void Tick(float DeltaSeconds) override;
+
+
+
 };
 
