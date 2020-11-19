@@ -19,6 +19,8 @@ UAbilityTask_InputHandler* UAbilityTask_InputHandler::InputHandler(
 
 
     // I want to save time and nerves, so I will not proceed input in tick, but jus bind input to the corresponded methods
+    ensure(IsValid(GASCharacter->InputComponent));
+
     GASCharacter->InputComponent->BindAction(
         "ActivateAbility1", IE_Pressed, Instance, &UAbilityTask_InputHandler::ActivateAbility1);
     GASCharacter->InputComponent->BindAction(

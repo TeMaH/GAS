@@ -22,4 +22,7 @@ public:
     void SwitchGASCharacter(AGASCharacter* FromAGASCharacter);
     UFUNCTION()
     void ApplyAbilityToCharacter(AGASCharacter* GASCharacter, FGameplayTag TagToApply);
+
+    UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
+    TMap<FGameplayTag, TSubclassOf<UGameplayAbility>> AbilitiesMap;
 };

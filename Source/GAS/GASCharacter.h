@@ -111,4 +111,7 @@ protected:
     UCharacterAbilitySystemComponent* AbilitySystemComponent = nullptr;
 
     void Tick(float DeltaSeconds) override;
+
+public:
+
 };

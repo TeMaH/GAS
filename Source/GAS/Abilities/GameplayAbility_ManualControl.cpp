@@ -41,7 +41,13 @@ void UGameplayAbility_ManualControl::ApplyAbilityToCharacter(AGASCharacter* GASC
     {
         UE_LOG(LogTemp, Warning, TEXT("%s UGameplayAbility_ManualControl::ApplyAbilityToCharacter TryActivateAbilitiesByTag '%s' for the character '%s' failed"),
             GASCharacter->HasAuthority() ? *FString("Setver ") : *FString("Client ") , *TagToApply.ToString(),
-            *GASCharacter->GetName()
-        );
+            *GASCharacter->GetName());
+    }
+    else
+    {
+        UE_LOG(LogTemp, Display,
+            TEXT("%s UGameplayAbility_ManualControl::ApplyAbilityToCharacter TryActivateAbilitiesByTag '%s' for the character '%s' OK"),
+            GASCharacter->HasAuthority() ? *FString("Setver ") : *FString("Client "), *TagToApply.ToString(),
+            *GASCharacter->GetName());
     }
 }

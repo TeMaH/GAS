@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "Abilities/GameplayAbility.h"
+
 #include "CharacterController.generated.h"
 
 /**
@@ -17,5 +19,11 @@ class GAS_API ACharacterController : public APlayerController
 protected:
 	void OnPossess(APawn* InPawn) override;
 	void OnUnPossess() override;
+
+public:
+    UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
+    TMap<FGameplayTag, TSubclassOf<UGameplayAbility>> AbilitiesMap;
+
+    virtual void ClientRestart_Implementation(class APawn* NewPawn) override;
 	
 };

@@ -91,6 +91,8 @@ void AGASCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInput
 void AGASCharacter::PossessedBy(AController* NewController)
 {
     Super::PossessedBy(NewController);
+    
+    AbilitySystemComponent->InitAbilityActorInfo(this, this);
 }
 
 void AGASCharacter::AcquireAbility(TSubclassOf<UGameplayAbility> AbilityToAquire)
