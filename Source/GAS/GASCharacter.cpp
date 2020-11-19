@@ -131,23 +131,23 @@ void AGASCharacter::BeginPlay()
             AcquireAbility(Ability);
         }
     }
-    else
-    {
-        for (TSubclassOf<UGameplayAbility>& Ability : ClientAbilities)
-        {
-            AcquireAbility(Ability);
-        }
+    //else
+    //{
+    //    for (TSubclassOf<UGameplayAbility>& Ability : ClientAbilities)
+    //    {
+    //        AcquireAbility(Ability);
+    //    }
 
-        FGameplayTagContainer ActivateAbilitiesWithTags;
-        ActivateAbilitiesWithTags.AddTag(FGameplayTag::RequestGameplayTag(TEXT("Ability.ManualControll")));
-        ensure(ActivateAbilitiesWithTags.Num() > 0);
-        if (!AbilitySystemComponent->TryActivateAbilitiesByTag(ActivateAbilitiesWithTags))
-        {
-            UE_LOG(LogTemp, Warning, TEXT("AGASCharacter::BeginPlay TryActivateAbilitiesByTag '%s' for the character '%s' failed")
-                , *ActivateAbilitiesWithTags.GetByIndex(0).ToString(), *GetName()
-            );
-        }
-    }
+    //    FGameplayTagContainer ActivateAbilitiesWithTags;
+    //    ActivateAbilitiesWithTags.AddTag(FGameplayTag::RequestGameplayTag(TEXT("Ability.ManualControll")));
+    //    ensure(ActivateAbilitiesWithTags.Num() > 0);
+    //    if (!AbilitySystemComponent->TryActivateAbilitiesByTag(ActivateAbilitiesWithTags))
+    //    {
+    //        UE_LOG(LogTemp, Warning, TEXT("AGASCharacter::BeginPlay TryActivateAbilitiesByTag '%s' for the character '%s' failed")
+    //            , *ActivateAbilitiesWithTags.GetByIndex(0).ToString(), *GetName()
+    //        );
+    //    }
+    //}
 }
 
 void AGASCharacter::OnResetVR()

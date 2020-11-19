@@ -36,8 +36,11 @@ public:
     
     UPROPERTY(BlueprintAssignable)
     FApplyAbilityToCharacterDelegate ApplyAbilityToCharacterDelegate;
-
+    
+    UFUNCTION()
     void ActivateAbility1();
+    UFUNCTION()
     void ActivateAbility2();
+    UFUNCTION()
     void SwitchCharacter();
 };

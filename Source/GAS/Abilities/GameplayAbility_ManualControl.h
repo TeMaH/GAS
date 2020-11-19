@@ -18,6 +18,8 @@ public:
     void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
         const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
     
+    UFUNCTION()
     void SwitchGASCharacter(AGASCharacter* FromAGASCharacter);
+    UFUNCTION()
     void ApplyAbilityToCharacter(AGASCharacter* GASCharacter, FGameplayTag TagToApply);
 };
