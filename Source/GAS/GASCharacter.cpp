@@ -93,6 +93,8 @@ void AGASCharacter::PossessedBy(AController* NewController)
     Super::PossessedBy(NewController);
     
     AbilitySystemComponent->InitAbilityActorInfo(this, this);
+    
+    AbilitySystemComponent->RefreshAbilityActorInfo();
 }
 
 void AGASCharacter::AcquireAbility(TSubclassOf<UGameplayAbility> AbilityToAquire)
@@ -114,6 +116,7 @@ void AGASCharacter::AcquireAbility(TSubclassOf<UGameplayAbility> AbilityToAquire
             FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilitySpecDef, 1);
             AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(AbilitySpec));
         }
+        AbilitySystemComponent->InitAbilityActorInfo(this, this);
     }
 }
 
