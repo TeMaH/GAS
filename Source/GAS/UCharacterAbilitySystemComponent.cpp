@@ -10,10 +10,3 @@ UCharacterAbilitySystemComponent::UCharacterAbilitySystemComponent(const FObject
 
 }
 
-//UCharacterAbilitySystemComponent::UCharacterAbilitySystemComponent()
-//{
-//}
-//
-//UCharacterAbilitySystemComponent::~UCharacterAbilitySystemComponent()
-//{
-//}
