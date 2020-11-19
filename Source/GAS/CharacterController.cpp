@@ -5,24 +5,21 @@
 
 #include "GASCharacter.h"
 
-ACharacterController::ACharacterController(const FObjectInitializer& ObjectInitializer)
-    : Super(ObjectInitializer)
-{
-    bAutoManageActiveCameraTarget = false;
-}
-
 void ACharacterController::OnPossess(APawn* InPawn)
 {
     Super::OnPossess(InPawn);
+    if (AGASCharacter* GASCharacter = Cast<AGASCharacter>(GetCharacter()))
+    {
+        GASCharacter->GetAbilitySystemComponent()->InitAbilityActorInfo(this, GASCharacter);
+        GASCharacter->ManageAbilitiesOnPossess();
+    }
 }
 
 void ACharacterController::OnUnPossess()
 {
     if (AGASCharacter* GASCharacter = Cast<AGASCharacter>(GetCharacter()))
     {
-        if (auto GASCharacterAbilitySystemComponent = GASCharacter->GetAbilitySystemComponent())
-        {
-        }
+        
     }
 
     Super::OnUnPossess();

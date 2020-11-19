@@ -2,16 +2,18 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "AIController.h"
+#include "CoreMinimal.h"
+
 #include "GASAIController.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class GAS_API AGASAIController : public AAIController
 {
-	GENERATED_BODY()
-	
+    GENERATED_BODY()
+
+        void OnPossess(APawn* InPawn) override;
 };
