@@ -21,6 +21,7 @@ void UGameplayAbility_ManualControl::ActivateAbility(const FGameplayAbilitySpecH
         {
             UAbilityTask_InputHandler* Task = UAbilityTask_InputHandler::InputHandler(this, FName(), GASCharacter);
             Task->SwitchGASCharacterDelegate.AddDynamic(this, &ThisClass::SwitchGASCharacter);
+            Task->ApplyAbilityToCharacterDelegate.AddDynamic(this, &ThisClass::ApplyAbilityToCharacter);
 
             Task->ReadyForActivation();
         }
@@ -29,5 +30,12 @@ void UGameplayAbility_ManualControl::ActivateAbility(const FGameplayAbilitySpecH
 
 void UGameplayAbility_ManualControl::SwitchGASCharacter(AGASCharacter* FromAGASCharacter)
 {
+    ensureMsgf(false, TEXT("Not implemented!"));
+}
 
+void UGameplayAbility_ManualControl::ApplyAbilityToCharacter(AGASCharacter* GASCharacter, FGameplayTag TagToApply)
+{
+    FGameplayTagContainer GameplayTagContainer;
+    GameplayTagContainer.AddTag(TagToApply);
+    GASCharacter->GetAbilitySystemComponent()->TryActivateAbilitiesByTag(GameplayTagContainer);
 }

@@ -19,4 +19,5 @@ public:
         const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
     
     void SwitchGASCharacter(AGASCharacter* FromAGASCharacter);
+    void ApplyAbilityToCharacter(AGASCharacter* GASCharacter, FGameplayTag TagToApply);
 };

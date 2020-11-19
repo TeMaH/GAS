@@ -10,6 +10,7 @@
 class AGASCharacter;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSwitchGASCharacterDelegate, AGASCharacter*, GASCharacter);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FApplyAbilityToCharacterDelegate, AGASCharacter*, GASCharacter, FGameplayTag, TagToApply);
 
 /**
  * 
@@ -32,4 +33,11 @@ public:
 
     UPROPERTY(BlueprintAssignable)
     FSwitchGASCharacterDelegate SwitchGASCharacterDelegate;
+    
+    UPROPERTY(BlueprintAssignable)
+    FApplyAbilityToCharacterDelegate ApplyAbilityToCharacterDelegate;
+
+    void ActivateAbility1();
+    void ActivateAbility2();
+    void SwitchCharacter();
 };
