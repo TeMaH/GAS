@@ -10,10 +10,6 @@ void ACharacterController::OnPossess(APawn* InPawn)
     Super::OnPossess(InPawn);
     if (AGASCharacter* GASCharacter = Cast<AGASCharacter>(InPawn))
     {
-        GASCharacter->ManageAbilitiesOnPossess();
-
-        GASCharacter->GetAbilitySystemComponent()->RefreshAbilityActorInfo();
-
 
         // Try to activate ManualControll ability
         TArray<struct FGameplayAbilitySpec*> MatchingGameplayAbilities;
@@ -67,7 +63,7 @@ void ACharacterController::ClientRestart_Implementation(class APawn* NewPawn)
         UAbilitySystemComponent* AbilitySystemComponent = GASCharacter->GetAbilitySystemComponent();
         if (IsValid(AbilitySystemComponent))
         {
-            AbilitySystemComponent->RefreshAbilityActorInfo();
+            //AbilitySystemComponent->RefreshAbilityActorInfo();
         }
     }
 }

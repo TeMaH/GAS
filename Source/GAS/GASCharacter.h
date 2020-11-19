@@ -51,12 +51,6 @@ protected:
 
     UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Gameplay Abilities")
     TArray<TSubclassOf<UGameplayAbility>> Abilities;
-    
-    UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Gameplay Abilities")
-    TArray<TSubclassOf<UGameplayAbility>> ServerAbilities;
-    
-    //UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Gameplay Abilities")
-    //TArray<TSubclassOf<UGameplayAbility>> ClientAbilities;
 
     void BeginPlay() override;
 

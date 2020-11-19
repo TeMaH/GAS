@@ -91,9 +91,7 @@ void AGASCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInput
 void AGASCharacter::PossessedBy(AController* NewController)
 {
     Super::PossessedBy(NewController);
-    
-    AbilitySystemComponent->InitAbilityActorInfo(this, this);
-    
+
     AbilitySystemComponent->RefreshAbilityActorInfo();
 }
 
@@ -116,7 +114,7 @@ void AGASCharacter::AcquireAbility(TSubclassOf<UGameplayAbility> AbilityToAquire
             FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilitySpecDef, 1);
             AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(AbilitySpec));
         }
-        AbilitySystemComponent->InitAbilityActorInfo(this, this);
+        //AbilitySystemComponent->InitAbilityActorInfo(this, this);
     }
 }
 
@@ -129,9 +127,12 @@ void AGASCharacter::BeginPlay()
     Set->InitFirstAttr(10.0f);
     Set->InitSecondAttr(20.2f);
     Set->InitThirdAttr(30.33f);
+
+    AbilitySystemComponent->InitAbilityActorInfo(this, this);
+
     if (HasAuthority())
     {
-        for (TSubclassOf<UGameplayAbility>& Ability : ServerAbilities)
+        for (TSubclassOf<UGameplayAbility>& Ability : Abilities)
         {
             AcquireAbility(Ability);
         }
