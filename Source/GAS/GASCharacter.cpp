@@ -92,7 +92,7 @@ void AGASCharacter::PossessedBy(AController* NewController)
 {
     Super::PossessedBy(NewController);
 
-    AbilitySystemComponent->RefreshAbilityActorInfo();
+    //AbilitySystemComponent->InitAbilityActorInfo(this, this);
 }
 
 void AGASCharacter::AcquireAbility(TSubclassOf<UGameplayAbility> AbilityToAquire)
@@ -128,8 +128,6 @@ void AGASCharacter::BeginPlay()
     Set->InitSecondAttr(20.2f);
     Set->InitThirdAttr(30.33f);
 
-    AbilitySystemComponent->InitAbilityActorInfo(this, this);
-
     if (HasAuthority())
     {
         for (TSubclassOf<UGameplayAbility>& Ability : Abilities)
@@ -137,23 +135,6 @@ void AGASCharacter::BeginPlay()
             AcquireAbility(Ability);
         }
     }
-    //else
-    //{
-    //    for (TSubclassOf<UGameplayAbility>& Ability : ClientAbilities)
-    //    {
-    //        AcquireAbility(Ability);
-    //    }
-
-    //    FGameplayTagContainer ActivateAbilitiesWithTags;
-    //    ActivateAbilitiesWithTags.AddTag(FGameplayTag::RequestGameplayTag(TEXT("Ability.ManualControll")));
-    //    ensure(ActivateAbilitiesWithTags.Num() > 0);
-    //    if (!AbilitySystemComponent->TryActivateAbilitiesByTag(ActivateAbilitiesWithTags))
-    //    {
-    //        UE_LOG(LogTemp, Warning, TEXT("AGASCharacter::BeginPlay TryActivateAbilitiesByTag '%s' for the character '%s' failed")
-    //            , *ActivateAbilitiesWithTags.GetByIndex(0).ToString(), *GetName()
-    //        );
-    //    }
-    //}
 }
 
 void AGASCharacter::OnResetVR()

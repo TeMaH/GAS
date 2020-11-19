@@ -3,6 +3,7 @@
 
 #include "AbilityTask_InputHandler.h"
 #include "../GASCharacter.h"
+#include "DrawDebugHelpers.h"
 
 UAbilityTask_InputHandler::UAbilityTask_InputHandler(const FObjectInitializer& InObjectInitializer)
     : Super(InObjectInitializer)
@@ -17,16 +18,14 @@ UAbilityTask_InputHandler* UAbilityTask_InputHandler::InputHandler(
     auto* Instance = NewAbilityTask<UAbilityTask_InputHandler>(OwningAbility, TaskInstanceName);
     Instance->GASCharacter = GASCharacter;
 
+    //// I want to save time and nerves, so I will not proceed input in tick, but jus bind input to the corresponded methods
+    //ensure(IsValid(GASCharacter->InputComponent));
 
-    // I want to save time and nerves, so I will not proceed input in tick, but jus bind input to the corresponded methods
-    ensure(IsValid(GASCharacter->InputComponent));
-
-    GASCharacter->InputComponent->BindAction(
-        "ActivateAbility1", IE_Pressed, Instance, &UAbilityTask_InputHandler::ActivateAbility1);
-    GASCharacter->InputComponent->BindAction(
-        "ActivateAbility2", IE_Pressed, Instance, &UAbilityTask_InputHandler::ActivateAbility2);
-    GASCharacter->InputComponent->BindAction("SwitchCharacter", IE_Pressed, Instance, &UAbilityTask_InputHandler::SwitchCharacter);
-
+    //GASCharacter->InputComponent->BindAction(
+    //    "ActivateAbility1", IE_Pressed, Instance, &UAbilityTask_InputHandler::ActivateAbility1);
+    //GASCharacter->InputComponent->BindAction(
+    //    "ActivateAbility2", IE_Pressed, Instance, &UAbilityTask_InputHandler::ActivateAbility2);
+    //GASCharacter->InputComponent->BindAction("SwitchCharacter", IE_Pressed, Instance, &UAbilityTask_InputHandler::SwitchCharacter);
 
     return Instance;
 }
@@ -34,9 +33,16 @@ UAbilityTask_InputHandler* UAbilityTask_InputHandler::InputHandler(
 void UAbilityTask_InputHandler::TickTask(float DeltaTime)
 {
     Super::TickTask(DeltaTime);
-    
-    //GASCharacter->InputComponent->
-    
+
+    if (IsValid(GASCharacter))
+    {
+        bool bHasAuthority = (GASCharacter->GetLocalRole() == ENetRole::ROLE_Authority);
+        FString Name = GASCharacter->GetName();
+
+        UE_LOG(LogTemp, Display, TEXT("%s UAbilityTask_InputHandler::TickTask character '%s' "),
+            GASCharacter->HasAuthority() ? *FString("Server ") : *FString("Client "),
+            *GASCharacter->GetName());
+    }
 }
 
 void UAbilityTask_InputHandler::ActivateAbility1()

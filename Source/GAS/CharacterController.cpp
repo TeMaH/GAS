@@ -5,12 +5,17 @@
 
 #include "GASCharacter.h"
 
+
+ACharacterController::ACharacterController(const FObjectInitializer& ObjectInitializer)
+    :Super(ObjectInitializer)
+{
+}
+
 void ACharacterController::OnPossess(APawn* InPawn)
 {
     Super::OnPossess(InPawn);
     if (AGASCharacter* GASCharacter = Cast<AGASCharacter>(InPawn))
     {
-
         // Try to activate ManualControll ability
         TArray<struct FGameplayAbilitySpec*> MatchingGameplayAbilities;
         FGameplayTagContainer GameplayTagContainer;
@@ -63,7 +68,7 @@ void ACharacterController::ClientRestart_Implementation(class APawn* NewPawn)
         UAbilitySystemComponent* AbilitySystemComponent = GASCharacter->GetAbilitySystemComponent();
         if (IsValid(AbilitySystemComponent))
         {
-            //AbilitySystemComponent->RefreshAbilityActorInfo();
+            AbilitySystemComponent->RefreshAbilityActorInfo();
         }
     }
 }

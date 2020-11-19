@@ -16,6 +16,9 @@ class GAS_API ACharacterController : public APlayerController
 {
 	GENERATED_BODY()
 
+public:
+    ACharacterController(const FObjectInitializer& ObjectInitializer);
+
 protected:
 	void OnPossess(APawn* InPawn) override;
 	void OnUnPossess() override;
