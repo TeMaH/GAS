@@ -39,14 +39,16 @@ public:
 
     UGASAttributeSet* GetAttributeSet() const;
 
+    UFUNCTION(Client, Reliable)
+    void ClientOnPossesed();
+    UFUNCTION(BlueprintImplementableEvent, Category = "Gameplay Abilities")
+    void OnPossessed();
     UFUNCTION(BlueprintImplementableEvent, Category = "Gameplay Abilities")
     void ManageAbilitiesOnPossess();
     UFUNCTION(BlueprintImplementableEvent, Category = "Gameplay Abilities")
     void ManageAbilitiesOnAIPossess();
 
 protected:
-    void PossessedBy(AController* NewController) override;
-
     void AcquireAbility(TSubclassOf<UGameplayAbility> AbilityToAquire);
 
     UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Gameplay Abilities")

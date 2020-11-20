@@ -88,11 +88,6 @@ void AGASCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInput
     PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &AGASCharacter::OnResetVR);
 }
 
-void AGASCharacter::PossessedBy(AController* NewController)
-{
-    Super::PossessedBy(NewController);
-}
-
 void AGASCharacter::AcquireAbility(TSubclassOf<UGameplayAbility> AbilityToAquire)
 {
     if (!HasAuthority())
@@ -118,12 +113,10 @@ void AGASCharacter::AcquireAbility(TSubclassOf<UGameplayAbility> AbilityToAquire
 void AGASCharacter::BeginPlay()
 {
     GetAbilitySystemComponent()->AddSet<UGASAttributeSet>();
-    Super::BeginPlay();
-
     UGASAttributeSet* Set = GetAttributeSet();
-    Set->InitFirstAttr(10.0f);
-    Set->InitSecondAttr(20.2f);
-    Set->InitThirdAttr(30.33f);
+    Set->InitFirstAttr(1.0f);
+    Set->InitSecondAttr(2.2f);
+    Set->InitThirdAttr(3.33f);
     if (HasAuthority())
     {
         for (TSubclassOf<UGameplayAbility>& Ability : Abilities)
@@ -131,6 +124,7 @@ void AGASCharacter::BeginPlay()
             AcquireAbility(Ability);
         }
     }
+    Super::BeginPlay();
 }
 
 void AGASCharacter::OnResetVR()
@@ -153,7 +147,7 @@ void AGASCharacter::TurnAtRate(float Rate)
     // calculate delta for this frame from the rate information
     AddControllerYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
 }
-
+ 
 void AGASCharacter::LookUpAtRate(float Rate)
 {
     // calculate delta for this frame from the rate information
@@ -198,33 +192,39 @@ void AGASCharacter::Tick(float DeltaSeconds)
     FGameplayTagContainer OwnerTags;
     AbilitySystemComponent->GetOwnedGameplayTags(OwnerTags);
 
-    FString CombinedStrings;
+    FString CombinedStrings = GetNameSafe(this);
+
     int32 TagCount = 1;
     const int32 NumTags = OwnerTags.Num();
     bool HasBug = false;
     for (FGameplayTag Tag : OwnerTags)
     {
         int32 Count = AbilitySystemComponent->GetTagCount(Tag);
-        CombinedStrings.Append(FString::Printf(TEXT("%s (%d)"), *Tag.ToString(), Count));
-        if (TagCount++ < NumTags)
-        {
-            CombinedStrings += TEXT(", /n");
-        }
+        CombinedStrings.Append(FString::Printf(TEXT("\n%s (%d)"), *Tag.ToString(), Count));
     }
 
     if (HasAuthority())
     {
-        UKismetSystemLibrary::PrintString(GetWorld(), CombinedStrings, true, false, FLinearColor::White, 0.0f);
+        UKismetSystemLibrary::PrintString(GetWorld(), CombinedStrings, true, false, IsLocallyControlled() ? FLinearColor::Yellow : FLinearColor::White, 0.0f);
     }
     else
     {
         DrawDebugString(GetWorld(), GetActorLocation() + FVector::UpVector * GetCapsuleComponent()->GetScaledCapsuleHalfHeight(),
             CombinedStrings,
             nullptr,       // class AActor* TestBaseActor = NULL
-            FColor::White, // FColor const& TextColor = FColor::White
+            IsLocallyControlled() ? FColor::White : FColor::Yellow, // FColor const& TextColor = FColor::White
             0.f            // float Duration = -1.000000
         );
     }
+}
+
+const FString EnumToString(const TCHAR* Enum, int32 EnumValue)
+{
+    const UEnum* EnumPtr = FindObject<UEnum>(ANY_PACKAGE, Enum, true);
+    if (!EnumPtr)
+        return NSLOCTEXT("Invalid", "Invalid", "Invalid").ToString();
+
+    return EnumPtr->GetDisplayNameText(EnumValue).ToString();
 }
 
 UAbilitySystemComponent* AGASCharacter::GetAbilitySystemComponent() const
@@ -235,4 +235,9 @@ UAbilitySystemComponent* AGASCharacter::GetAbilitySystemComponent() const
 UGASAttributeSet* AGASCharacter::GetAttributeSet() const
 {
     return const_cast<UGASAttributeSet*>(GetAbilitySystemComponent()->GetSet<UGASAttributeSet>());
+}
+
+void AGASCharacter::ClientOnPossesed_Implementation()
+{
+    OnPossessed();
 }
