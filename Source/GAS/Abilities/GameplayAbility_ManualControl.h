@@ -7,6 +7,7 @@
 #include "GameplayAbility_ManualControl.generated.h"
 
 class AGASCharacter;
+class ACharacterController;
 /**
  * 
  */

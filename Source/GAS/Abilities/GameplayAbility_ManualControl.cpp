@@ -5,6 +5,7 @@
 
 #include "AbilityTask_InputHandler.h"
 #include "../GASCharacter.h"
+#include "../CharacterController.h"
 
 void UGameplayAbility_ManualControl::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
     const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
@@ -43,7 +44,10 @@ void UGameplayAbility_ManualControl::ActivateAbility(const FGameplayAbilitySpecH
 
 void UGameplayAbility_ManualControl::SwitchGASCharacter(AGASCharacter* FromAGASCharacter)
 {
-    ensureMsgf(false, TEXT("Not implemented!"));
+    ensureMsgf(false, TEXT("Not implemented yet!"));
+    if (ACharacterController* CharacterController = Cast<ACharacterController>(FromAGASCharacter->GetController()))
+    {
+    }
 }
 
 void UGameplayAbility_ManualControl::ApplyAbilityToCharacter(AGASCharacter* GASCharacter, FGameplayTag TagToApply)
