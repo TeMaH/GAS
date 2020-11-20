@@ -36,12 +36,21 @@ void UAbilityTask_InputHandler::TickTask(float DeltaTime)
 
     if (IsValid(GASCharacter))
     {
-        bool bHasAuthority = (GASCharacter->GetLocalRole() == ENetRole::ROLE_Authority);
-        FString Name = GASCharacter->GetName();
+        //bool bHasAuthority = (GASCharacter->GetLocalRole() == ENetRole::ROLE_Authority);
+        //FString Name = GASCharacter->GetName();
 
-        UE_LOG(LogTemp, Display, TEXT("%s UAbilityTask_InputHandler::TickTask character '%s' "),
-            GASCharacter->HasAuthority() ? *FString("Server ") : *FString("Client "),
-            *GASCharacter->GetName());
+        //UE_LOG(LogTemp, Display, TEXT("%s UAbilityTask_InputHandler::TickTask character '%s' "),
+        //    GASCharacter->HasAuthority() ? *FString("Server ") : *FString("Client "),
+        //    *GASCharacter->GetName());
+
+        if (GASCharacter->HasAuthority())
+        {
+            FString Name = GASCharacter->GetName();
+        }
+        else
+        {
+            FString Name = GASCharacter->GetName();
+        }
     }
 }
 

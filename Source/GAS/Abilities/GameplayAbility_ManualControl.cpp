@@ -10,6 +10,19 @@ void UGameplayAbility_ManualControl::ActivateAbility(const FGameplayAbilitySpecH
     const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
     const FGameplayEventData* TriggerEventData)
 {
+
+    {
+        FString Msg = FString::Printf(TEXT("UGameplayAbility_ManualControl::ActivateAbility"));
+
+        if (auto GASCharacter = Cast<AGASCharacter>(ActorInfo->AvatarActor.Get()))
+        {
+            Msg.Append(" ").Append(GASCharacter->GetName());
+            Msg.Append(GASCharacter->HasAuthority() ? FString("Server ") : FString("Client "));
+        }
+
+        UE_LOG(LogTemp, Display, TEXT("%s "),*Msg);
+    }
+
     if (!CommitAbility(Handle, ActorInfo, ActivationInfo))
     {
         EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, true);

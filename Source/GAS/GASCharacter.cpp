@@ -92,7 +92,7 @@ void AGASCharacter::PossessedBy(AController* NewController)
 {
     Super::PossessedBy(NewController);
 
-    //AbilitySystemComponent->InitAbilityActorInfo(this, this);
+    AbilitySystemComponent->InitAbilityActorInfo(this, this);
 }
 
 void AGASCharacter::AcquireAbility(TSubclassOf<UGameplayAbility> AbilityToAquire)
