@@ -86,6 +86,11 @@ void AGASCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInput
 
     // VR headset functionality
     PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &AGASCharacter::OnResetVR);
+
+    // Custom Activity
+    PlayerInputComponent->BindAction("ActivateAbility1", IE_Pressed, this, &AGASCharacter::ActivateAbility1);
+    PlayerInputComponent->BindAction("ActivateAbility2", IE_Pressed, this, &AGASCharacter::ActivateAbility2);
+    PlayerInputComponent->BindAction("SwitchCharacter", IE_Pressed, this, &AGASCharacter::SwitchCharacter);
 }
 
 void AGASCharacter::PossessedBy(AController* NewController)
@@ -239,4 +244,20 @@ UAbilitySystemComponent* AGASCharacter::GetAbilitySystemComponent() const
 UGASAttributeSet* AGASCharacter::GetAttributeSet() const
 {
     return const_cast<UGASAttributeSet*>(GetAbilitySystemComponent()->GetSet<UGASAttributeSet>());
+}
+
+
+void AGASCharacter::ActivateAbility1()
+{
+    ApplyAbilityToCharacterDelegate.Broadcast(this, FGameplayTag::RequestGameplayTag(TEXT("Ability.GA1")));
+}
+
+void AGASCharacter::ActivateAbility2()
+{
+    ApplyAbilityToCharacterDelegate.Broadcast(this, FGameplayTag::RequestGameplayTag(TEXT("Ability.GA2")));
+}
+
+void AGASCharacter::SwitchCharacter()
+{
+    SwitchGASCharacterDelegate.Broadcast(this);
 }

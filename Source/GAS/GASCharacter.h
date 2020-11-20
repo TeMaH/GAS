@@ -10,6 +10,11 @@
 
 #include "GASCharacter.generated.h"
 
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSwitchGASCharacterDelegate, AGASCharacter*, GASCharacter);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
+    FApplyAbilityToCharacterDelegate, AGASCharacter*, GASCharacter, FGameplayTag, TagToApply);
+
 UCLASS(config = Game)
 class AGASCharacter : public ACharacter, public IAbilitySystemInterface
 {
@@ -106,6 +111,17 @@ protected:
 
     void Tick(float DeltaSeconds) override;
 
-public:
+protected:
+    UFUNCTION()
+    void ActivateAbility1();
+    UFUNCTION()
+    void ActivateAbility2();
+    UFUNCTION()
+    void SwitchCharacter();
 
+public:
+    UPROPERTY(BlueprintAssignable)
+    FSwitchGASCharacterDelegate SwitchGASCharacterDelegate;
+    UPROPERTY(BlueprintAssignable)
+    FApplyAbilityToCharacterDelegate ApplyAbilityToCharacterDelegate;
 };

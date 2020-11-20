@@ -18,14 +18,9 @@ UAbilityTask_InputHandler* UAbilityTask_InputHandler::InputHandler(
     auto* Instance = NewAbilityTask<UAbilityTask_InputHandler>(OwningAbility, TaskInstanceName);
     Instance->GASCharacter = GASCharacter;
 
-    //// I want to save time and nerves, so I will not proceed input in tick, but jus bind input to the corresponded methods
-    //ensure(IsValid(GASCharacter->InputComponent));
-
-    //GASCharacter->InputComponent->BindAction(
-    //    "ActivateAbility1", IE_Pressed, Instance, &UAbilityTask_InputHandler::ActivateAbility1);
-    //GASCharacter->InputComponent->BindAction(
-    //    "ActivateAbility2", IE_Pressed, Instance, &UAbilityTask_InputHandler::ActivateAbility2);
-    //GASCharacter->InputComponent->BindAction("SwitchCharacter", IE_Pressed, Instance, &UAbilityTask_InputHandler::SwitchCharacter);
+    // I want to save time and nerves, so I will not proceed input in tick, but jus bind input actions to the corresponded methods
+    Instance->GASCharacter->ApplyAbilityToCharacterDelegate.AddDynamic(Instance, &UAbilityTask_InputHandler::ActivateAbility);
+    Instance->GASCharacter->SwitchGASCharacterDelegate.AddDynamic(Instance, &UAbilityTask_InputHandler::SwitchCharacter);
 
     return Instance;
 }
@@ -36,13 +31,6 @@ void UAbilityTask_InputHandler::TickTask(float DeltaTime)
 
     if (IsValid(GASCharacter))
     {
-        //bool bHasAuthority = (GASCharacter->GetLocalRole() == ENetRole::ROLE_Authority);
-        //FString Name = GASCharacter->GetName();
-
-        //UE_LOG(LogTemp, Display, TEXT("%s UAbilityTask_InputHandler::TickTask character '%s' "),
-        //    GASCharacter->HasAuthority() ? *FString("Server ") : *FString("Client "),
-        //    *GASCharacter->GetName());
-
         if (GASCharacter->HasAuthority())
         {
             FString Name = GASCharacter->GetName();
@@ -54,17 +42,21 @@ void UAbilityTask_InputHandler::TickTask(float DeltaTime)
     }
 }
 
-void UAbilityTask_InputHandler::ActivateAbility1()
+void UAbilityTask_InputHandler::ActivateAbility(AGASCharacter* InGASCharacter, FGameplayTag TagToApply)
 {
-    ApplyAbilityToCharacterDelegate.Broadcast(GASCharacter, FGameplayTag::RequestGameplayTag(TEXT("AbilityAbility.GA1")));
+    ApplyAbilityToCharacterDelegate.Broadcast(InGASCharacter, TagToApply);
 }
 
-void UAbilityTask_InputHandler::ActivateAbility2()
+void UAbilityTask_InputHandler::SwitchCharacter(AGASCharacter* InGASCharacter)
 {
-    ApplyAbilityToCharacterDelegate.Broadcast(GASCharacter, FGameplayTag::RequestGameplayTag(TEXT("AbilityAbility.GA2")));
+    SwitchGASCharacterDelegate.Broadcast(InGASCharacter);
 }
 
-void UAbilityTask_InputHandler::SwitchCharacter()
+void UAbilityTask_InputHandler::OnDestroy(bool bInOwnerFinished)
 {
-    SwitchGASCharacterDelegate.Broadcast(GASCharacter);
+    Super::OnDestroy(bInOwnerFinished);
+}
+void UAbilityTask_InputHandler::BeginDestroy()
+{
+    Super::BeginDestroy();
 }

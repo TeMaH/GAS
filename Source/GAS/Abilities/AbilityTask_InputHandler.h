@@ -9,8 +9,8 @@
 
 class AGASCharacter;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSwitchGASCharacterDelegate, AGASCharacter*, GASCharacter);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FApplyAbilityToCharacterDelegate, AGASCharacter*, GASCharacter, FGameplayTag, TagToApply);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSwitchCharacterDelegate, AGASCharacter*, GASCharacter);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FApplyAbilityDelegate, AGASCharacter*, GASCharacter, FGameplayTag, TagToApply);
 
 /**
  * 
@@ -32,15 +32,17 @@ public:
         UGameplayAbility* OwningAbility, FName TaskInstanceName, AGASCharacter* GASCharacter);
 
     UPROPERTY(BlueprintAssignable)
-    FSwitchGASCharacterDelegate SwitchGASCharacterDelegate;
+    FSwitchCharacterDelegate SwitchGASCharacterDelegate;
     
     UPROPERTY(BlueprintAssignable)
-    FApplyAbilityToCharacterDelegate ApplyAbilityToCharacterDelegate;
+    FApplyAbilityDelegate ApplyAbilityToCharacterDelegate;
     
+
     UFUNCTION()
-    void ActivateAbility1();
+    void ActivateAbility(AGASCharacter* InGASCharacter, FGameplayTag TagToApply);
     UFUNCTION()
-    void ActivateAbility2();
-    UFUNCTION()
-    void SwitchCharacter();
+    void SwitchCharacter(AGASCharacter* InGASCharacter);
+
+	virtual void OnDestroy(bool bInOwnerFinished) override;
+    virtual void BeginDestroy() override;
 };

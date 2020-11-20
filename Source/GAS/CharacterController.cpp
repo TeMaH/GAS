@@ -19,7 +19,7 @@ void ACharacterController::ActivateManualControll(APawn* InPawn)
         // Try to activate ManualControll ability
         TArray<struct FGameplayAbilitySpec*> MatchingGameplayAbilities;
         FGameplayTagContainer GameplayTagContainer;
-        GameplayTagContainer.AddTag(FGameplayTag::RequestGameplayTag(TEXT("Ability.ManualControll")));
+        GameplayTagContainer.AddTag(FGameplayTag::RequestGameplayTag(TEXT("ManualControllAbility")));
 
         GASCharacter->GetAbilitySystemComponent()->GetActivatableGameplayAbilitySpecsByAllMatchingTags(
             GameplayTagContainer, MatchingGameplayAbilities);
