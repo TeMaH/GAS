@@ -34,5 +34,11 @@ public:
     TMap<FGameplayTag, TSubclassOf<UGameplayAbility>> AbilitiesMap;
 
     virtual void ClientRestart_Implementation(class APawn* NewPawn) override;
+
+	UFUNCTION(Server, Reliable /*, WithValidation*/)
+    void SwitchCharacter(AGASCharacter* AGASCharacter);
+
+    UFUNCTION(Server, Reliable /*, WithValidation*/)
+    void SwapControllers(AGASCharacter* FromCharacter, AGASCharacter* ToCharacter);
 	
 };

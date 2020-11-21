@@ -4,10 +4,16 @@
 #include "GameplayAbility_ManualControl.h"
 
 #include "AbilityTask_InputHandler.h"
+
+#include "../GASGameMode.h"
+
 #include "../GASCharacter.h"
 #include "../CharacterController.h"
-
 #include "../CharacterSelector.h"
+
+
+
+#include "Kismet/GameplayStatics.h"
 
 void UGameplayAbility_ManualControl::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
     const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
@@ -47,7 +53,14 @@ void UGameplayAbility_ManualControl::ActivateAbility(const FGameplayAbilitySpecH
 void UGameplayAbility_ManualControl::SwitchGASCharacter(AGASCharacter* FromAGASCharacter)
 {
     //ensureMsgf(false, TEXT("Not implemented yet!"));
-    CharacterSelector::SwitchCharacter(FromAGASCharacter, FromAGASCharacter->GetWorld());
+    //CharacterSelector::SwitchCharacter(FromAGASCharacter, FromAGASCharacter->GetWorld());
+
+    AController* Controller = FromAGASCharacter->GetController();
+    ACharacterController* CharacterController = Cast<ACharacterController>(Controller);
+    if (IsValid(CharacterController))
+    {
+        CharacterController->SwitchCharacter(FromAGASCharacter);
+    }
 }
 
 void UGameplayAbility_ManualControl::ApplyAbilityToCharacter(AGASCharacter* GASCharacter, FGameplayTag TagToApply)

@@ -6,6 +6,9 @@
 #include "GameFramework/GameMode.h"
 #include "GASGameMode.generated.h"
 
+
+class AGASCharacter;
+
 UCLASS(minimalapi)
 class AGASGameMode : public AGameMode
 {

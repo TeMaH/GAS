@@ -15,9 +15,4 @@ public:
 	CharacterSelector();
 	~CharacterSelector();
 
-	UFUNCTION(Server, Reliable /*, WithValidation*/)
-	static void SwitchCharacter(AGASCharacter* AGASCharacter, UWorld* World);
-
-	UFUNCTION(Server, Reliable /*, WithValidation*/)
-    static void SwapControllers(AGASCharacter* FromCharacter, AGASCharacter* ToCharacter, UWorld* World);
 };
