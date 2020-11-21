@@ -17,9 +17,15 @@ ACharacterController::ACharacterController(const FObjectInitializer& ObjectIniti
 
 void ACharacterController::ActivateManualControll(APawn* InPawn)
 {
+
     AGASCharacter* GASCharacter = Cast<AGASCharacter>(InPawn);
     if (IsValid(GASCharacter))
     {
+
+        UE_LOG(LogTemp, Display,
+        TEXT("%s ACharacterController::ActivateManualControll for the character '%s'"),
+        GASCharacter->HasAuthority() ? *FString("Server ") : *FString("Client "), *GASCharacter->GetName());
+
         // Try to activate ManualControll ability
         TArray<struct FGameplayAbilitySpec*> MatchingGameplayAbilities;
         FGameplayTagContainer GameplayTagContainer;
@@ -47,6 +53,14 @@ void ACharacterController::ActivateManualControll(APawn* InPawn)
                         GASCharacter->HasAuthority() ? *FString("Server ") : *FString("Client "),
                         *FString("Ability.ManualControll"), *GASCharacter->GetName());
                 }
+            }
+            else
+            {
+                UE_LOG(LogTemp, Display,
+                    TEXT(
+                        "%s ACharacterController::ActivateManualControll GameplayAbility with tag '%s' is active for '%s'"),
+                    GASCharacter->HasAuthority() ? *FString("Server ") : *FString("Client "), *FString("Ability.ManualControll"),
+                    *GASCharacter->GetName());
             }
         }
     }
@@ -102,79 +116,3 @@ void ACharacterController::ClientRestart_Implementation(class APawn* NewPawn)
     }
 }
 
-void ACharacterController::SwapControllers_Implementation(AGASCharacter* FromCharacter, AGASCharacter* ToCharacter)
-{
-    const auto FromController = FromCharacter->GetController();
-    const auto ToController = ToCharacter->GetController();
-
-    if (!FromController || !ToController)
-    {
-        UE_LOG(LogTemp, Error, TEXT("%s (FromCharacter) CharacterSelector::SwitchCharacter One of controllers is null"),
-            FromCharacter->HasAuthority() ? *FString("Server ") : *FString("Client "));
-
-        return;
-    }
-
-    FromController->Possess(ToCharacter);
-    ToController->Possess(FromCharacter);
-
-    UE_LOG(LogTemp, Display, TEXT("%s (FromCharacter) %s (ToCharacter) CharacterSelector::SwitchCharacter Controllers switched"),
-        FromCharacter->HasAuthority() ? *FString("Server ") : *FString("Client "),
-        ToCharacter->HasAuthority() ? *FString("Server ") : *FString("Client "));
-}
-
-void ACharacterController::SwitchCharacter_Implementation(AGASCharacter* GASCharacter)
-{
-    TArray<AActor*> FoundActors;
-    UGameplayStatics::GetAllActorsOfClass(GetWorld(), AGASCharacter::StaticClass(), FoundActors);
-
-    // Select Character to switch to
-    for (auto Actor : FoundActors)
-    {
-        AGASCharacter* TempCharacter = Cast<AGASCharacter>(Actor);
-
-        UE_LOG(LogTemp, Display, TEXT("%s CharacterSelector::SwitchCharacter character '%s'"),
-            GASCharacter->HasAuthority() ? *FString("Server ") : *FString("Client "), *TempCharacter->GetName());
-
-        if (TempCharacter == GASCharacter)
-        {
-            continue;
-        }
-
-        AController* Controller = (TempCharacter->GetController());
-        ACharacterController* TCharacterController = Cast<ACharacterController>(Controller);
-
-        if (AGASAIController* GASAIController = Cast<AGASAIController>(TempCharacter->GetController()))
-        {
-            UE_LOG(LogTemp, Display,
-                TEXT("%s CharacterSelector::SwitchCharacter Switch controller from '%s' to '%s' (AGASAIController)"),
-                GASCharacter->HasAuthority() ? *FString("Server ") : *FString("Client "), *GASCharacter->GetName(),
-                *TempCharacter->GetName());
-
-            SwapControllers(GASCharacter, TempCharacter);
-
-            break;
-        }
-        else if (ACharacterController* CharacterController = Cast<ACharacterController>(TempCharacter->GetController()))
-        {
-            UE_LOG(LogTemp, Display,
-                TEXT("%s CharacterSelector::SwitchCharacter Switch controller from '%s' to '%s' (ACharacterController)"),
-                GASCharacter->HasAuthority() ? *FString("Server ") : *FString("Client "), *GASCharacter->GetName(),
-                *TempCharacter->GetName());
-
-            SwapControllers(GASCharacter, TempCharacter);
-
-            break;
-        }
-        else
-        {
-            UE_LOG(LogTemp, Display, TEXT("%s CharacterSelector::SwitchCharacter Switch controller from '%s' to '%s' "),
-                GASCharacter->HasAuthority() ? *FString("Server ") : *FString("Client "), *GASCharacter->GetName(),
-                *TempCharacter->GetName());
-
-            SwapControllers(GASCharacter, TempCharacter);
-
-            break;
-        }
-    }
-}

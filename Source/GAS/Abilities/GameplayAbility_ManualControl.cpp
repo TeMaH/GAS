@@ -26,7 +26,7 @@ void UGameplayAbility_ManualControl::ActivateAbility(const FGameplayAbilitySpecH
         if (auto GASCharacter = Cast<AGASCharacter>(ActorInfo->AvatarActor.Get()))
         {
             Msg.Append(" ").Append(GASCharacter->GetName());
-            Msg.Append(GASCharacter->HasAuthority() ? FString("Server ") : FString("Client "));
+            Msg.Append(GASCharacter->HasAuthority() ? FString(" Server") : FString(" Client"));
         }
 
         UE_LOG(LogTemp, Display, TEXT("%s "),*Msg);
@@ -52,15 +52,7 @@ void UGameplayAbility_ManualControl::ActivateAbility(const FGameplayAbilitySpecH
 
 void UGameplayAbility_ManualControl::SwitchGASCharacter(AGASCharacter* FromAGASCharacter)
 {
-    //ensureMsgf(false, TEXT("Not implemented yet!"));
-    //CharacterSelector::SwitchCharacter(FromAGASCharacter, FromAGASCharacter->GetWorld());
-
-    AController* Controller = FromAGASCharacter->GetController();
-    ACharacterController* CharacterController = Cast<ACharacterController>(Controller);
-    if (IsValid(CharacterController))
-    {
-        CharacterController->SwitchCharacter(FromAGASCharacter);
-    }
+    FromAGASCharacter->ServerSwitchCharacter(FromAGASCharacter);
 }
 
 void UGameplayAbility_ManualControl::ApplyAbilityToCharacter(AGASCharacter* GASCharacter, FGameplayTag TagToApply)

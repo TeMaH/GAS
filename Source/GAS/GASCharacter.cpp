@@ -143,6 +143,8 @@ void AGASCharacter::BeginPlay()
             AcquireAbility(Ability);
         }
     }
+
+     CharacterSelector = NewObject<UCharacterSelector>(this, UCharacterSelector::ComponentName);
 }
 
 void AGASCharacter::OnResetVR()
@@ -236,6 +238,8 @@ void AGASCharacter::Tick(float DeltaSeconds)
         CombinedStrings.Append("\nACharacterController");
     }
 
+    CombinedStrings.Append("\n").Append(GetName());
+
     //if (HasAuthority())
     //{
     //    UKismetSystemLibrary::PrintString(GetWorld(), CombinedStrings, true, false, FLinearColor::White, 0.0f);
@@ -275,4 +279,12 @@ void AGASCharacter::ActivateAbility2()
 void AGASCharacter::SwitchCharacter()
 {
     SwitchGASCharacterDelegate.Broadcast(this);
+}
+
+void AGASCharacter::ServerSwitchCharacter_Implementation(AGASCharacter* GASCharacter)
+{
+    if (IsValid(CharacterSelector))
+    {
+        CharacterSelector->SwitchCharacter(GASCharacter);
+    }
 }

@@ -8,6 +8,8 @@
 #include "GameFramework/Character.h"
 #include "UCharacterAbilitySystemComponent.h"
 
+#include "CharacterSelector.h"
+
 #include "GASCharacter.generated.h"
 
 
@@ -111,6 +113,7 @@ protected:
 
     void Tick(float DeltaSeconds) override;
 
+
 protected:
     UFUNCTION()
     void ActivateAbility1();
@@ -124,4 +127,10 @@ public:
     FSwitchGASCharacterDelegate SwitchGASCharacterDelegate;
     UPROPERTY(BlueprintAssignable)
     FApplyAbilityToCharacterDelegate ApplyAbilityToCharacterDelegate;
+
+    UCharacterSelector* CharacterSelector = nullptr;
+
+    UFUNCTION(Server, Reliable /*, WithValidation*/)
+    void ServerSwitchCharacter(AGASCharacter* AGASCharacter);
+
 };

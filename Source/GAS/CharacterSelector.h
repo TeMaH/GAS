@@ -4,15 +4,22 @@
 
 #include "CoreMinimal.h"
 
+#include "CharacterSelector.generated.h"
+
 class AGASCharacter;
 
 /**
  * 
  */
-class GAS_API CharacterSelector
+UCLASS()
+class GAS_API UCharacterSelector : public UActorComponent
 {
-public:
-	CharacterSelector();
-	~CharacterSelector();
+    GENERATED_BODY()
 
+public:
+    static FName ComponentName;
+
+    void SwitchCharacter(AGASCharacter* AGASCharacter);
+
+    void SwapControllers(AGASCharacter* FromCharacter, AGASCharacter* ToCharacter);
 };
