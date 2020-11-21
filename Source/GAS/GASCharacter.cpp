@@ -13,6 +13,9 @@
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
 
+#include "CharacterController.h"
+#include "GASAIController.h"
+
 //////////////////////////////////////////////////////////////////////////
 // AGASCharacter
 
@@ -211,29 +214,41 @@ void AGASCharacter::Tick(float DeltaSeconds)
     int32 TagCount = 1;
     const int32 NumTags = OwnerTags.Num();
     bool HasBug = false;
+
+    CombinedStrings.Append(HasAuthority() ? FString("Server: ") : FString("Client: "));
+    
     for (FGameplayTag Tag : OwnerTags)
     {
         int32 Count = AbilitySystemComponent->GetTagCount(Tag);
         CombinedStrings.Append(FString::Printf(TEXT("%s (%d)"), *Tag.ToString(), Count));
         if (TagCount++ < NumTags)
         {
-            CombinedStrings += TEXT(", /n");
+            CombinedStrings += TEXT(", \n");
         }
     }
 
-    if (HasAuthority())
+    if (auto TController = Cast<AGASAIController>(GetController()))
     {
-        UKismetSystemLibrary::PrintString(GetWorld(), CombinedStrings, true, false, FLinearColor::White, 0.0f);
+        CombinedStrings.Append("\nAGASAIController");
     }
-    else
+    if (auto TController = Cast<ACharacterController>(GetController()))
     {
+        CombinedStrings.Append("\nACharacterController");
+    }
+
+    //if (HasAuthority())
+    //{
+    //    UKismetSystemLibrary::PrintString(GetWorld(), CombinedStrings, true, false, FLinearColor::White, 0.0f);
+    //}
+    //else
+    //{
         DrawDebugString(GetWorld(), GetActorLocation() + FVector::UpVector * GetCapsuleComponent()->GetScaledCapsuleHalfHeight(),
             CombinedStrings,
             nullptr,       // class AActor* TestBaseActor = NULL
             FColor::White, // FColor const& TextColor = FColor::White
             0.f            // float Duration = -1.000000
         );
-    }
+    //}
 }
 
 UAbilitySystemComponent* AGASCharacter::GetAbilitySystemComponent() const
