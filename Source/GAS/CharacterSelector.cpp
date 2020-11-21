@@ -64,26 +64,5 @@ void UCharacterSelector::SwitchCharacter(AGASCharacter* GASCharacter)
 
             break;
         }
-        else if (ACharacterController* CharacterController = Cast<ACharacterController>(TempCharacter->GetController()))
-        {
-            UE_LOG(LogTemp, Display,
-                TEXT("%s CharacterSelector::SwitchCharacter Switch controller from '%s' to '%s' (ACharacterController)"),
-                GASCharacter->HasAuthority() ? *FString("Server ") : *FString("Client "), *GASCharacter->GetName(),
-                *TempCharacter->GetName());
-
-            SwapControllers(GASCharacter, TempCharacter);
-
-            break;
-        }
-        else
-        {
-            UE_LOG(LogTemp, Display, TEXT("%s CharacterSelector::SwitchCharacter Switch controller from '%s' to '%s' "),
-                GASCharacter->HasAuthority() ? *FString("Server ") : *FString("Client "), *GASCharacter->GetName(),
-                *TempCharacter->GetName());
-
-            SwapControllers(GASCharacter, TempCharacter);
-
-            break;
-        }
     }
 }
