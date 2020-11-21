@@ -7,6 +7,8 @@
 #include "../GASCharacter.h"
 #include "../CharacterController.h"
 
+#include "../CharacterSelector.h"
+
 void UGameplayAbility_ManualControl::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
     const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
     const FGameplayEventData* TriggerEventData)
@@ -44,10 +46,8 @@ void UGameplayAbility_ManualControl::ActivateAbility(const FGameplayAbilitySpecH
 
 void UGameplayAbility_ManualControl::SwitchGASCharacter(AGASCharacter* FromAGASCharacter)
 {
-    ensureMsgf(false, TEXT("Not implemented yet!"));
-    if (ACharacterController* CharacterController = Cast<ACharacterController>(FromAGASCharacter->GetController()))
-    {
-    }
+    //ensureMsgf(false, TEXT("Not implemented yet!"));
+    CharacterSelector::SwitchCharacter(FromAGASCharacter, FromAGASCharacter->GetWorld());
 }
 
 void UGameplayAbility_ManualControl::ApplyAbilityToCharacter(AGASCharacter* GASCharacter, FGameplayTag TagToApply)
