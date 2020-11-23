@@ -62,7 +62,7 @@ Press Y on game-pad  to switch characters.
 Issues with GameplayAbility System we faced
 -------------------------------------------
 
-- We have added delay in 1 second before activating the *ManualControll*. We did not managed to activate this ability on client side without this delay :(
+- We can't activate ability right after Possess, because AbilityActorInfo does not have time to replicate. Therefore, at the time of activation Client Side NetMode of Avatar ROLE_SimulatedProxy. So we have added delay in 1 second before activating the *ManualControll*.
 - On the client the effect which we apply not always removes already applied tag.
 
 More details about tags removing. In case it runs as listen server - everything works correctly. We have only one tag per actor as we expect. See the picture below.
