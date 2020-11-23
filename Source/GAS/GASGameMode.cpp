@@ -5,6 +5,7 @@
 #include "UObject/ConstructorHelpers.h"
 #include "AIController.h"
 #include "GASAIController.h"
+#include "CharacterSelector.h"
 
 AGASGameMode::AGASGameMode()
 {
@@ -14,6 +15,8 @@ AGASGameMode::AGASGameMode()
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
+
+     CharacterSelector = NewObject<UCharacterSelector>(this, UCharacterSelector::ComponentName);
 }
 
 void AGASGameMode::RestartPlayer(AController* NewPlayer)
