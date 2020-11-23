@@ -41,4 +41,11 @@ Issues with GameplayAbility System we faced
 - On the client the effect which we apply not always removes allready applied tag.
 
 Moere details about tags removing. In case it runs as listen server - everything works correctly. We have only one tag per actor as we expect. See the picture below.
-![Listen server](.)
+![Listen server](./misc/screanshots/OnePlayer_ListenServer.png)
+In case it runs as Client the behaviour is different.
+If you switch to another character and apply any Ability (GA1 or GA2) your character will have *two*(!) tags. In case you switch back to the first character and apply ability too you also will get two tags here. You could see such situation on the two screanshots bellow.
+
+![Listen server](./misc/screanshots/OnePlayer_Client_02.png)
+
+![Listen server](./misc/screanshots/OnePlayer_Client_03.png)
+
