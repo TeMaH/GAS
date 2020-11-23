@@ -17,7 +17,6 @@ ACharacterController::ACharacterController(const FObjectInitializer& ObjectIniti
 
 void ACharacterController::ActivateManualControll(APawn* InPawn)
 {
-
     AGASCharacter* GASCharacter = Cast<AGASCharacter>(InPawn);
     if (IsValid(GASCharacter))
     {
@@ -66,11 +65,6 @@ void ACharacterController::ActivateManualControll(APawn* InPawn)
     }
 }
 
-void ACharacterController::EmptyMethod()
-{
-    // This method does nothing
-}
-
 void ACharacterController::OnPossess(APawn* InPawn)
 {
     Super::OnPossess(InPawn);
@@ -81,6 +75,7 @@ void ACharacterController::OnPossess(APawn* InPawn)
         *InPawn->GetName());
     
     // We need any delay here before call ActivateManualControll.
+    // Is there any way to activate the ability
     // Create Delegate to pass the arguments to ActivateManualControll
     FTimerDelegate TimerDel;
     TimerDel.BindUFunction(this, FName("ActivateManualControll"), InPawn);

@@ -26,9 +26,6 @@ protected:
 	UFUNCTION()
 	void ActivateManualControll(APawn* InPawn);
 
-	void EmptyMethod();
-
-
 public:
     UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
     TMap<FGameplayTag, TSubclassOf<UGameplayAbility>> AbilitiesMap;
