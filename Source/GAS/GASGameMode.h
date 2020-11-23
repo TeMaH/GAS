@@ -6,6 +6,10 @@
 #include "GameFramework/GameMode.h"
 #include "GASGameMode.generated.h"
 
+
+class AGASCharacter;
+class UCharacterSelector;
+
 UCLASS(minimalapi)
 class AGASGameMode : public AGameMode
 {
@@ -21,6 +25,8 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpawnPoints")
 	TArray<AActor*> StartPoints;
+
+	UCharacterSelector* CharacterSelector = nullptr;
 };
 
 

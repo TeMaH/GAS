@@ -8,7 +8,14 @@
 #include "GameFramework/Character.h"
 #include "UCharacterAbilitySystemComponent.h"
 
+#include "CharacterSelector.h"
+
 #include "GASCharacter.generated.h"
+
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSwitchGASCharacterDelegate, AGASCharacter*, GASCharacter);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
+    FApplyAbilityToCharacterDelegate, AGASCharacter*, GASCharacter, FGameplayTag, TagToApply);
 
 UCLASS(config = Game)
 class AGASCharacter : public ACharacter, public IAbilitySystemInterface
@@ -39,16 +46,14 @@ public:
 
     UGASAttributeSet* GetAttributeSet() const;
 
-    UFUNCTION(Client, Reliable)
-    void ClientOnPossesed();
-    UFUNCTION(BlueprintImplementableEvent, Category = "Gameplay Abilities")
-    void OnPossessed();
     UFUNCTION(BlueprintImplementableEvent, Category = "Gameplay Abilities")
     void ManageAbilitiesOnPossess();
     UFUNCTION(BlueprintImplementableEvent, Category = "Gameplay Abilities")
     void ManageAbilitiesOnAIPossess();
 
 protected:
+    void PossessedBy(AController* NewController) override;
+
     void AcquireAbility(TSubclassOf<UGameplayAbility> AbilityToAquire);
 
     UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Gameplay Abilities")
@@ -107,4 +112,25 @@ protected:
     UCharacterAbilitySystemComponent* AbilitySystemComponent = nullptr;
 
     void Tick(float DeltaSeconds) override;
+
+
+protected:
+    UFUNCTION()
+    void ActivateAbility1();
+    UFUNCTION()
+    void ActivateAbility2();
+    UFUNCTION()
+    void SwitchCharacter();
+
+public:
+    UPROPERTY(BlueprintAssignable)
+    FSwitchGASCharacterDelegate SwitchGASCharacterDelegate;
+    UPROPERTY(BlueprintAssignable)
+    FApplyAbilityToCharacterDelegate ApplyAbilityToCharacterDelegate;
+
+    UCharacterSelector* CharacterSelector = nullptr;
+
+    UFUNCTION(Server, Reliable /*, WithValidation*/)
+    void ServerSwitchCharacter(AGASCharacter* AGASCharacter);
+
 };
